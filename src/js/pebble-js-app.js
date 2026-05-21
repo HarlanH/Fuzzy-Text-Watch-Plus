@@ -40,8 +40,6 @@ function buildConfigUrl(hasColorScreen, initialSettings) {
     "<div class='row'><label>Time offset, minutes</label><select id='offset'>" +
     "<option value='0'>0:00</option><option value='60'>1:00</option><option value='120'>2:00</option><option value='150'>2:30</option>" +
     "<option value='180'>3:00</option><option value='240'>4:00</option><option value='300'>5:00</option></select></div>" +
-    "<div class='row'><label>Greeting display time</label><select id='message_time'>" +
-    "<option value='0'>off</option><option value='2'>2 seconds</option><option value='3'>3 seconds</option><option value='4'>4 seconds</option></select></div>" +
     "<div class='row'><label>Enable backlight on gesture</label><select id='gesture'>" +
     "<option value='0'>Off</option><option value='2'>Flick wrist</option><option value='3'>Shake up/down</option><option value='1'>Boxing move</option><option value='4'>Any shake</option></select></div>" +
     "<div class='row'><label>Connection lost</label><select id='bt'>" +
@@ -56,7 +54,7 @@ function buildConfigUrl(hasColorScreen, initialSettings) {
     "<button id='save'>Save</button><p class='muted'>Version: " + version + "</p>" +
     "<script>(function(){var hasColor=" + (hasColorScreen ? "true" : "false") + ";" +
     "var initialSettings=" + initialSettingsJson + ";" +
-    "var defaults={inverse_colors:false,background_color:'0x000000',regular_color:'0xFFFFFF',bold_color:'0xFFFFFF',language:'2',offset:'180',message_time:'3',gesture:'4',bt_notification:'2',strict_hour_phrases:true,calendar_ics_1:'',calendar_ics_2:'',calendar_ics_3:''};" +
+    "var defaults={inverse_colors:false,background_color:'0x000000',regular_color:'0xFFFFFF',bold_color:'0xFFFFFF',language:'2',offset:'180',gesture:'4',bt_notification:'2',strict_hour_phrases:true,calendar_ics_1:'',calendar_ics_2:'',calendar_ics_3:''};" +
     "function normUrl(url){var trimmed=String(url||'').trim();if(trimmed.indexOf('webcal://')===0){return 'https://'+trimmed.substring('webcal://'.length);}return trimmed;}" +
     "function load(){try{var raw=localStorage.getItem('" + SETTINGS_STORAGE_KEY + "');if(raw){return Object.assign({},defaults,initialSettings,JSON.parse(raw));}}catch(e){}return Object.assign({},defaults,initialSettings);}" +
     "function save(v){try{localStorage.setItem('" + SETTINGS_STORAGE_KEY + "',JSON.stringify(v));}catch(e){}}" +
@@ -68,15 +66,14 @@ function buildConfigUrl(hasColorScreen, initialSettings) {
     "document.getElementById('bold').value=state.bold_color||'0xFFFFFF';" +
     "document.getElementById('language').value=String(state.language||'2');" +
     "document.getElementById('offset').value=String(state.offset||'180');" +
-    "document.getElementById('message_time').value=String(state.message_time||'3');" +
     "document.getElementById('gesture').value=String(state.gesture||'4');" +
     "document.getElementById('bt').value=String(state.bt_notification||'2');" +
     "document.getElementById('strict_hour').checked=state.strict_hour_phrases!==false;" +
     "document.getElementById('calendar_ics_1').value=String(state.calendar_ics_1||state.calendar_ics||'');" +
     "document.getElementById('calendar_ics_2').value=String(state.calendar_ics_2||'');" +
     "document.getElementById('calendar_ics_3').value=String(state.calendar_ics_3||'');" +
-    "document.getElementById('test_fetch').addEventListener('click',function(){var out={inverse_colors:document.getElementById('inverse').checked,background_color:document.getElementById('background').value,regular_color:document.getElementById('regular').value,bold_color:document.getElementById('bold').value,language:document.getElementById('language').value,offset:document.getElementById('offset').value,message_time:document.getElementById('message_time').value,gesture:document.getElementById('gesture').value,bt_notification:document.getElementById('bt').value,strict_hour_phrases:document.getElementById('strict_hour').checked,calendar_ics_1:normUrl(document.getElementById('calendar_ics_1').value),calendar_ics_2:normUrl(document.getElementById('calendar_ics_2').value),calendar_ics_3:normUrl(document.getElementById('calendar_ics_3').value),test_fetch:'1'};save(out);document.location='pebblejs://close#'+encodeURIComponent(JSON.stringify(out));});" +
-    "document.getElementById('save').addEventListener('click',function(){var out={inverse_colors:document.getElementById('inverse').checked,background_color:document.getElementById('background').value,regular_color:document.getElementById('regular').value,bold_color:document.getElementById('bold').value,language:document.getElementById('language').value,offset:document.getElementById('offset').value,message_time:document.getElementById('message_time').value,gesture:document.getElementById('gesture').value,bt_notification:document.getElementById('bt').value,strict_hour_phrases:document.getElementById('strict_hour').checked,calendar_ics_1:normUrl(document.getElementById('calendar_ics_1').value),calendar_ics_2:normUrl(document.getElementById('calendar_ics_2').value),calendar_ics_3:normUrl(document.getElementById('calendar_ics_3').value)};save(out);document.location='pebblejs://close#'+encodeURIComponent(JSON.stringify(out));});})();</script>" +
+    "document.getElementById('test_fetch').addEventListener('click',function(){var out={inverse_colors:document.getElementById('inverse').checked,background_color:document.getElementById('background').value,regular_color:document.getElementById('regular').value,bold_color:document.getElementById('bold').value,language:document.getElementById('language').value,offset:document.getElementById('offset').value,gesture:document.getElementById('gesture').value,bt_notification:document.getElementById('bt').value,strict_hour_phrases:document.getElementById('strict_hour').checked,calendar_ics_1:normUrl(document.getElementById('calendar_ics_1').value),calendar_ics_2:normUrl(document.getElementById('calendar_ics_2').value),calendar_ics_3:normUrl(document.getElementById('calendar_ics_3').value),test_fetch:'1'};save(out);document.location='pebblejs://close#'+encodeURIComponent(JSON.stringify(out));});" +
+    "document.getElementById('save').addEventListener('click',function(){var out={inverse_colors:document.getElementById('inverse').checked,background_color:document.getElementById('background').value,regular_color:document.getElementById('regular').value,bold_color:document.getElementById('bold').value,language:document.getElementById('language').value,offset:document.getElementById('offset').value,gesture:document.getElementById('gesture').value,bt_notification:document.getElementById('bt').value,strict_hour_phrases:document.getElementById('strict_hour').checked,calendar_ics_1:normUrl(document.getElementById('calendar_ics_1').value),calendar_ics_2:normUrl(document.getElementById('calendar_ics_2').value),calendar_ics_3:normUrl(document.getElementById('calendar_ics_3').value)};save(out);document.location='pebblejs://close#'+encodeURIComponent(JSON.stringify(out));});})();</script>" +
     "</body></html>";
 
   return 'data:text/html;charset=utf-8,' + encodeURIComponent(html);
@@ -100,9 +97,6 @@ function configDataToDict(configData) {
 
   var offset = configData.offset;
   if (offset !== undefined) dict.KEY_OFFSET = parseInt(offset, 10);
-
-  var messageTime = configData.message_time;
-  if (messageTime !== undefined) dict.KEY_MESSAGE_TIME = parseInt(messageTime, 10);
 
   var gesture = configData.gesture;
   if (gesture !== undefined) dict.KEY_GESTURE = parseInt(gesture, 10);

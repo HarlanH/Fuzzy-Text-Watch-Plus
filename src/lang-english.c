@@ -68,5 +68,17 @@ const Language LANG_ENGLISH = {
   .meeting_now = "Meeting Now!",
   .meeting_soon = "Meeting Soon!",
 
-  .number_of_exceptions = 0
+  .number_of_exceptions = 2,
+  .exceptions = {
+    {
+      .hours = 0,
+      .pentaminutes = 0,
+      .phrase = "*midnight "
+    },
+    {
+      .hours = 12,
+      .pentaminutes = 0,
+      .phrase = "*noon "
+    }
+  }
 };

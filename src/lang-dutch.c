@@ -67,5 +67,17 @@ const Language LANG_DUTCH = {
 	.meeting_now = "Vergadering Nu!",
 	.meeting_soon = "Vergadering Zo!",
 
-    .number_of_exceptions = 0
+  .number_of_exceptions = 2,
+  .exceptions = {
+    {
+      .hours = 0,
+      .pentaminutes = 0,
+      .phrase = "*midder- nacht "
+    },
+    {
+      .hours = 12,
+      .pentaminutes = 0,
+      .phrase = "*middag "
+    }
+  }
 };

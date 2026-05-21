@@ -8,7 +8,6 @@
 #define KEY_BOLD_TEXT 3
 #define KEY_LANGUAGE 4
 #define KEY_OFFSET 5
-#define KEY_MESSAGE_TIME 6
 #define KEY_GESTURE 7
 #define KEY_BT_NOTIFICATION 8
 #define KEY_MEETING_STATUS 9
@@ -89,7 +88,7 @@ int configureLayersForText(char text[NUM_LINES][BUFFER_SIZE], char format[]);
 void string_to_lines(char *str, char lines[NUM_LINES][BUFFER_SIZE], char format[]);
 void time_to_lines(int hours, int minutes, struct tm *raw_local,
                    char lines[NUM_LINES][BUFFER_SIZE], char format[]);
-void display_message(char *message, int displayTime, bool hide_day_row);
+void display_message(char *message, int displayTime);
 void display_time(struct tm *t, bool force);
 void checkConnection(time_t *now);
 void update_status_indicators(void);
@@ -98,7 +97,6 @@ void init_line(Line* line);
 struct tm *get_localtime();
 void refresh_time();
 void set_offset(int offset);
-void set_message_time(int mTime);
 void set_gesture(int gesture);
 void set_bt_lost_notification(int bt_notification);
 void set_strict_hour_phrases(bool enabled);

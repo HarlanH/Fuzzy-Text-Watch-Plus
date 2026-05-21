@@ -58,5 +58,17 @@ const Language LANG_JAPANESE = {
   .meeting_now = "Kaigi ima!",
   .meeting_soon = "Kaigi sugu!",
 
-  .number_of_exceptions = 0
+  .number_of_exceptions = 2,
+  .exceptions = {
+    {
+      .hours = 0,
+      .pentaminutes = 0,
+      .phrase = "*shinya "
+    },
+    {
+      .hours = 12,
+      .pentaminutes = 0,
+      .phrase = "*shougo "
+    }
+  }
 };

@@ -107,6 +107,14 @@ static bool raw_in_half_window(struct tm *raw, int hour_adj) {
   return raw->tm_hour == hour_adj && raw->tm_min >= 30 && raw->tm_min < 35;
 }
 
+// Stitch prefix + hour + suffix; do not use phrase as a printf format (literal * must survive).
+static void substitute_hour_in_phrase(char *out, size_t out_len, const char *phrase,
+                                      const char *hour, const char *var) {
+  int prefix_len = (int)(var - phrase);
+  const char *suffix = var + 2;
+  snprintf(out, out_len, "%.*s%s%s", prefix_len, phrase, hour, suffix);
+}
+
 static void time_to_words_impl(int hours, int minutes, char* words, size_t length) {
   memset(words, 0, length);
 
@@ -129,9 +137,7 @@ static void time_to_words_impl(int hours, int minutes, char* words, size_t lengt
     }
 
     if (variable != NULL) {
-      *variable = '%';
-      *(variable + 1) = 's';
-      snprintf(words, length, phrase, hour);
+      substitute_hour_in_phrase(words, length, phrase, hour, variable);
     } else {
       strncpy(words, phrase, length);
     }

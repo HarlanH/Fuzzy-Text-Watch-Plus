@@ -16,13 +16,6 @@ static void handle_shared_settings(DictionaryIterator *iter, const ConfigMessage
     APP_LOG(APP_LOG_LEVEL_DEBUG, "Offset is %d", offset_t->value->uint16);
   }
 
-  Tuple *message_time_t = dict_find(iter, KEY_MESSAGE_TIME);
-  if (message_time_t) {
-    ctx->set_message_time(message_time_t->value->uint8);
-    persist_write_int(KEY_MESSAGE_TIME, message_time_t->value->uint8);
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Message time is %d", message_time_t->value->uint8);
-  }
-
   Tuple *gesture_t = dict_find(iter, KEY_GESTURE);
   if (gesture_t) {
     ctx->set_gesture(gesture_t->value->uint8);
@@ -97,9 +90,6 @@ void config_message_read_persisted_state(const ConfigMessageContext *ctx) {
   }
   if (persist_exists(KEY_OFFSET)) {
     ctx->set_offset(persist_read_int(KEY_OFFSET));
-  }
-  if (persist_exists(KEY_MESSAGE_TIME)) {
-    ctx->set_message_time(persist_read_int(KEY_MESSAGE_TIME));
   }
   if (persist_exists(KEY_GESTURE)) {
     ctx->set_gesture(persist_read_int(KEY_GESTURE));

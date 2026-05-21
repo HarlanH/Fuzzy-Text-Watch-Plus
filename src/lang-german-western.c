@@ -68,9 +68,19 @@ const Language LANG_GERMAN_W = {
   .meeting_now = "Treffen jetzt!",
   .meeting_soon = "Treffen bald!",
 
-  .number_of_exceptions = 2,
+  .number_of_exceptions = 4,
 
   .exceptions = {
+     {
+       .hours = 0,
+       .pentaminutes = 0,
+       .phrase = "*Mittern- acht "
+     },
+     {
+       .hours = 12,
+       .pentaminutes = 0,
+       .phrase = "*Mittag "
+     },
      {
        .hours = 1,
        .pentaminutes = 0,

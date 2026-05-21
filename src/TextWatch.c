@@ -43,9 +43,6 @@ int timeOffset;
 // When true (default), do not show :00 / :30 phrases until local time reaches that point
 static bool strictHourPhrases = true;
 
-// Greeting splash (display_message with hide_day_row): hide status row until splash ends
-static bool top_row_hidden_for_splash = false;
-
 // Variale to keep track of the last minute that we updated the time
 // Used to optimise so we only need to run time logic once per minute.
 int lastMinute = -1;
@@ -57,10 +54,6 @@ time_t resetMessageTime = 0;
 // Time in seconds since epoch when connection lost message will be displayed,
 // if connection is still lost... (attempt to reduce false notifications)
 time_t connectionLostTime = 0;
-
-// Time in seconds to diplay the greeting messages at startup. 0 means disable
-// greeting messages.
-int messageTime = 3;
 
 // Which gesture to activate date screen
 // 0 = off
@@ -250,10 +243,6 @@ static void weather_apply_from_app_message(int32_t code, int32_t temp_f)
 
 void update_status_indicators(void)
 {
-	if (top_row_hidden_for_splash) {
-		return;
-	}
-
 	bool show_bt = !btConnected;
 	bool show_shh = quiet_time_is_active();
 	if (show_bt && show_shh) {
@@ -640,7 +629,7 @@ void update_day_of_month_line(struct tm *t, bool force)
 }
 
 // Update screen based on new time
-void display_message(char *message, int displayTime, bool hide_day_row)
+void display_message(char *message, int displayTime)
 {
 	if (displayTime > 0 && resetMessageTime == 0) {
 		// The current time text will be stored in the following strings
@@ -658,15 +647,6 @@ void display_message(char *message, int displayTime, bool hide_day_row)
 		}
 		
 		currentNLines = nextNLines;
-
-		layer_set_hidden(text_layer_get_layer(dayOfMonthLayer), hide_day_row);
-
-		top_row_hidden_for_splash = hide_day_row;
-		if (top_row_hidden_for_splash) {
-			layer_set_hidden(text_layer_get_layer(btStatusLayer), true);
-			layer_set_hidden(text_layer_get_layer(meetingStatusLayer), true);
-			layer_set_hidden(text_layer_get_layer(batteryStatusLayer), true);
-		}
 
 		time(&resetMessageTime);
 		resetMessageTime += displayTime;
@@ -735,9 +715,7 @@ static void accel_tap_handler(AccelAxisType axis, int32_t direction) {
   }
 
   if (backlightTimer != NULL) {
-  	if (!top_row_hidden_for_splash) {
-  		cycle_top_row_phrase();
-  	}
+  	cycle_top_row_phrase();
   	app_timer_cancel(backlightTimer);
   }
 
@@ -764,13 +742,6 @@ void handle_tick(struct tm *tick_time, TimeUnits units_changed) {
   	if (now >= resetMessageTime) {
   		resetMessageTime = 0;
   		force = true;
-  		layer_set_hidden(text_layer_get_layer(dayOfMonthLayer), false);
-  		if (top_row_hidden_for_splash) {
-  			top_row_hidden_for_splash = false;
-  			layer_set_hidden(text_layer_get_layer(btStatusLayer), false);
-  			layer_set_hidden(text_layer_get_layer(meetingStatusLayer), false);
-  			layer_set_hidden(text_layer_get_layer(batteryStatusLayer), false);
-  		}
   	}
   }
 
@@ -780,9 +751,7 @@ void handle_tick(struct tm *tick_time, TimeUnits units_changed) {
   	lastTopRowRotationMinute = tick_time->tm_min;
   } else if (lastTopRowRotationMinute != tick_time->tm_min) {
   	lastTopRowRotationMinute = tick_time->tm_min;
-  	if (!top_row_hidden_for_splash) {
-  		update_top_row_phrase_rotation();
-  	}
+  	update_top_row_phrase_rotation();
   }
 
   update_status_indicators();
@@ -828,10 +797,6 @@ void refresh_time() {
 
 void set_offset(int offset) {
 	timeOffset = offset;
-}
-
-void set_message_time(int mTime) {
-	messageTime = mTime;
 }
 
 void set_gesture(int gesture) {
@@ -881,7 +846,7 @@ void notify_bt_lost() {
 		light_enable_interaction();
 		char message[48];
 		get_connection_lost_message(message);
-		display_message(message, BT_LOST_DISPLAY_TIME, false);
+		display_message(message, BT_LOST_DISPLAY_TIME);
 	}
 }
 
@@ -916,7 +881,6 @@ void handle_init() {
 	config_message_context.bold_text_color = &boldTextColor;
 	config_message_context.set_language = set_language;
 	config_message_context.set_offset = set_offset;
-	config_message_context.set_message_time = set_message_time;
 	config_message_context.set_gesture = set_gesture;
 	config_message_context.set_bt_lost_notification = set_bt_lost_notification;
 	config_message_context.set_strict_hour_phrases = set_strict_hour_phrases;
@@ -980,17 +944,7 @@ void handle_init() {
 		layer_add_child(window_layer, (Layer *)lines[i].nextLayer);
 	}
 
-	// Show greeting message
-	char greeting[48];
-	time_to_greeting(get_localtime()->tm_hour, greeting);
-#if DEBUG == 1
-	time_to_greeting(get_localtime()->tm_sec * 24 / 60, greeting);
-#endif
-	if (messageTime > 0) {
-		display_message(greeting, messageTime, true);
-	} else {
-		refresh_time();
-	}
+	refresh_time();
 	// Subscribe to ticks
 	tick_timer_service_subscribe(SECOND_UNIT, handle_tick);
 

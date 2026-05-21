@@ -65,5 +65,17 @@ const Language LANG_SPANISH = {
   .meeting_soon = "Reunión Pronto!",
 
 
-    .number_of_exceptions = 0
+  .number_of_exceptions = 2,
+  .exceptions = {
+    {
+      .hours = 0,
+      .pentaminutes = 0,
+      .phrase = "*media- noche "
+    },
+    {
+      .hours = 12,
+      .pentaminutes = 0,
+      .phrase = "*medio- día "
+    }
+  }
 };

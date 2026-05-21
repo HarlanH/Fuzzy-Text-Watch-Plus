@@ -39,7 +39,6 @@ function toAppMessageDict(config) {
   const dict = {};
   if (config.language !== undefined) dict.KEY_LANGUAGE = toNumber(config.language, 'language');
   if (config.offset !== undefined) dict.KEY_OFFSET = toNumber(config.offset, 'offset');
-  if (config.message_time !== undefined) dict.KEY_MESSAGE_TIME = toNumber(config.message_time, 'message_time');
   if (config.gesture !== undefined) dict.KEY_GESTURE = toNumber(config.gesture, 'gesture');
   if (config.bt_notification !== undefined) dict.KEY_BT_NOTIFICATION = toNumber(config.bt_notification, 'bt_notification');
   if (config.strict_hour_phrases !== undefined) dict.KEY_STRICT_HOUR_PHRASES = boolToBinary(Boolean(config.strict_hour_phrases));

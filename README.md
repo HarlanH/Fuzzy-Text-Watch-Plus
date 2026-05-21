@@ -86,9 +86,6 @@ The companion app uses an embedded `data:` URL for the configuration page, so no
 - [ ] Better support for round watch designs
 - [ ] Test suite with screenshot review
 - [ ] handle timeline notifications https://developer.repebble.com/tutorials/watchface-tutorial/part5/
-- [ ] "noon" and "midnight" special casing
-- [ ] fix "twenty til five" with five in wrong font
-- [ ] get rid of splash screen
 
 ## For developers
 
@@ -116,7 +113,7 @@ See `AGENTS.md` for a concise command reference.
 
 The emulator config webview callback can be unreliable on some platforms. For local iteration, this repo includes a YAML-driven path that sends settings directly as AppMessage tuples (bypassing HTML/webview callbacks).
 
-1. Edit `dev-config.yml` with the values you want (for example `language`, `offset`, `message_time`, `gesture`, `bt_notification`, `strict_hour_phrases`). Optionally add **`weather_code`** and **`weather_temp_f`** (integers) to mimic PKJS weather tuples for screenshots or layout tests.
+1. Edit `dev-config.yml` with the values you want (for example `language`, `offset`, `gesture`, `bt_notification`, `strict_hour_phrases`). Optionally add **`weather_code`** and **`weather_temp_f`** (integers) to mimic PKJS weather tuples for screenshots or layout tests.
 2. Install/run the watchface on your emulator target.
 3. Apply settings:
    - `npm run emu:apply-config -- --emulator flint`

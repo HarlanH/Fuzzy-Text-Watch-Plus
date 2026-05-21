@@ -1,6 +1,5 @@
 language: 2
 offset: 0
-message_time: 3
 gesture: 4
 bt_notification: 2
 strict_hour_phrases: true

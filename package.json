@@ -5,7 +5,7 @@
   "scripts": {
     "build": "pebble build",
     "clean": "pebble clean",
-    "test:js": "node --test test/**/*.test.js",
+    "test:js": "node --test test/pkjs/*.test.js test/tools/*.test.js test/*.test.js",
     "test": "npm run test:js",
     "codegen:weather": "node scripts/codegen-weather.js",
     "codegen:ui": "node scripts/codegen-ui.js",
@@ -28,7 +28,6 @@
     "uuid": "d410f38b-abb7-41ce-a6de-05c9cb821296",
     "messageKeys": {
       "KEY_LANGUAGE": 4,
-      "KEY_MESSAGE_TIME": 6,
       "KEY_REGULAR_TEXT": 2,
       "KEY_INVERSE": 0,
       "KEY_BACKGROUND": 1,

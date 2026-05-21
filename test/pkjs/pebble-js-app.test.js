@@ -50,7 +50,6 @@ test('configDataToDict maps app settings keys', () => {
     bold_color: '0xABCDEF',
     language: '2',
     offset: '180',
-    message_time: '3',
     gesture: '4',
     bt_notification: '2'
   });
@@ -61,7 +60,6 @@ test('configDataToDict maps app settings keys', () => {
   assert.equal(dict.KEY_BOLD_TEXT, 239);
   assert.equal(dict.KEY_LANGUAGE, 2);
   assert.equal(dict.KEY_OFFSET, 180);
-  assert.equal(dict.KEY_MESSAGE_TIME, 3);
   assert.equal(dict.KEY_GESTURE, 4);
   assert.equal(dict.KEY_BT_NOTIFICATION, 2);
   assert.equal(dict.KEY_STRICT_HOUR_PHRASES, 1);

@@ -70,5 +70,17 @@ const Language LANG_ITALIAN = {
   .meeting_now = "Riunione Ora!",
   .meeting_soon = "Riunione Presto!",
 
-    .number_of_exceptions = 0
+  .number_of_exceptions = 2,
+  .exceptions = {
+    {
+      .hours = 0,
+      .pentaminutes = 0,
+      .phrase = "*mezza- notte "
+    },
+    {
+      .hours = 12,
+      .pentaminutes = 0,
+      .phrase = "*mezzo- giorno "
+    }
+  }
 };

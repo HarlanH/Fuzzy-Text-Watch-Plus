@@ -58,8 +58,18 @@ const Language LANG_FRENCH = {
   .meeting_now = "Réunion !",
   .meeting_soon = "Réunion Bientôt !",
 
-  .number_of_exceptions = 2,
+  .number_of_exceptions = 4,
   .exceptions = {
+    {
+      .hours = 0,
+      .pentaminutes = 0,
+      .phrase = "*minuit "
+    },
+    {
+      .hours = 12,
+      .pentaminutes = 0,
+      .phrase = "*midi "
+    },
     {
       .hours = 1,
       .pentaminutes = 0,

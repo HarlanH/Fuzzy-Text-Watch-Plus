@@ -1,8 +1,6 @@
 # Reproducible settings for marketing screenshots (English locales).
 language: 2
 offset: 0
-# 0 skips greeting splash so screenshots show the main face immediately.
-message_time: 0
 gesture: 4
 bt_notification: 2
 strict_hour_phrases: true

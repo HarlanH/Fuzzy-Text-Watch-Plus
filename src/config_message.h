@@ -8,7 +8,6 @@ typedef struct {
   GColor8 *bold_text_color;
   void (*set_language)(uint8_t language);
   void (*set_offset)(int offset);
-  void (*set_message_time)(int message_time);
   void (*set_gesture)(int gesture);
   void (*set_bt_lost_notification)(int bt_notification);
   void (*set_strict_hour_phrases)(bool enabled);

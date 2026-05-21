@@ -74,5 +74,17 @@ const Language LANG_NORWEGIAN = {
   .meeting_soon = "Mote Snart!",
 
 
-    .number_of_exceptions = 0
+  .number_of_exceptions = 2,
+  .exceptions = {
+    {
+      .hours = 0,
+      .pentaminutes = 0,
+      .phrase = "*midnatt "
+    },
+    {
+      .hours = 12,
+      .pentaminutes = 0,
+      .phrase = "*middag "
+    }
+  }
 };
