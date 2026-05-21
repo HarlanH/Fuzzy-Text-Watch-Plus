@@ -2,5 +2,6 @@
   "build": {
     "dockerfile": "Dockerfile",
     "context": ".."
-  }
+  },
+  "install": "npm ci && pebble sdk install latest"
 }
