@@ -86,6 +86,9 @@ The companion app uses an embedded `data:` URL for the configuration page, so no
 - [ ] Better support for round watch designs
 - [ ] Test suite with screenshot review
 - [ ] handle timeline notifications https://developer.repebble.com/tutorials/watchface-tutorial/part5/
+- [ ] "noon" and "midnight" special casing
+- [ ] fix "twenty til five" with five in wrong font
+- [ ] get rid of splash screen
 
 ## For developers
 
