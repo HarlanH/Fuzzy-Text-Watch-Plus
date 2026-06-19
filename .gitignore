@@ -1,6 +1,6 @@
 .*
 !.gitignore
-!.cursor/
+!.kilo/
 /sim
 *~
 

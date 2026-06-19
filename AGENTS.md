@@ -1,4 +1,4 @@
-## Cursor Cloud specific instructions
+## Project setup
 
 ### Overview
 
