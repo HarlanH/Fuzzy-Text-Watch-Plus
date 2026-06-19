@@ -1,4 +1,5 @@
 #include <pebble.h>
+#include <ctype.h>
 #ifdef PBL_COLOR
   #include "gcolor_definitions.h" // Allows the use of color
 #endif
@@ -25,6 +26,8 @@ bool btConnected = true;
 int batteryPercent = 100;
 bool topRowShowWeather = false;
 int lastTopRowRotationMinute = -1;
+bool bottomLineShowDow = false;
+bool lastBottomLineShowDow = false;
 
 Line lines[NUM_LINES];
 
@@ -617,14 +620,23 @@ void day_to_ordinal_words(int day, char *output, size_t length)
 	get_day_of_month_message(day, output, length);
 }
 
-void update_day_of_month_line(struct tm *t, bool force)
+void update_bottom_line(struct tm *t, bool force)
 {
-	if (!force && lastDisplayedDay == t->tm_mday) {
+	if (!force && lastDisplayedDay == t->tm_mday && bottomLineShowDow == lastBottomLineShowDow) {
 		return;
 	}
 
 	lastDisplayedDay = t->tm_mday;
-	day_to_ordinal_words(t->tm_mday, dayOfMonthText, sizeof(dayOfMonthText));
+	lastBottomLineShowDow = bottomLineShowDow;
+
+	if (bottomLineShowDow) {
+		strftime(dayOfMonthText, sizeof(dayOfMonthText), "%A", t);
+		for (char *p = dayOfMonthText; *p; p++) {
+			*p = tolower((unsigned char)*p);
+		}
+	} else {
+		day_to_ordinal_words(t->tm_mday, dayOfMonthText, sizeof(dayOfMonthText));
+	}
 	text_layer_set_text(dayOfMonthLayer, dayOfMonthText);
 }
 
@@ -715,9 +727,11 @@ static void accel_tap_handler(AccelAxisType axis, int32_t direction) {
   }
 
   if (backlightTimer != NULL) {
-  	cycle_top_row_phrase();
-  	app_timer_cancel(backlightTimer);
-  }
+   	cycle_top_row_phrase();
+   	bottomLineShowDow = !bottomLineShowDow;
+   	update_bottom_line(get_localtime(), true);
+   	app_timer_cancel(backlightTimer);
+   }
 
   light_enable(true);
   backlightTimer = app_timer_register(BACKLIGHT_TIMEOUT_MS, backlight_off_handler, NULL);
@@ -748,15 +762,16 @@ void handle_tick(struct tm *tick_time, TimeUnits units_changed) {
   check_connection(&now);
 
   if (lastTopRowRotationMinute == -1) {
-  	lastTopRowRotationMinute = tick_time->tm_min;
-  } else if (lastTopRowRotationMinute != tick_time->tm_min) {
-  	lastTopRowRotationMinute = tick_time->tm_min;
-  	update_top_row_phrase_rotation();
-  }
+   	lastTopRowRotationMinute = tick_time->tm_min;
+   } else if (lastTopRowRotationMinute != tick_time->tm_min) {
+   	lastTopRowRotationMinute = tick_time->tm_min;
+   	update_top_row_phrase_rotation();
+   	bottomLineShowDow = !bottomLineShowDow;
+   }
 
-  update_status_indicators();
+   update_status_indicators();
 
-  update_day_of_month_line(tick_time, false);
+   update_bottom_line(tick_time, false);
   display_time(tick_time, force);
 }
 
@@ -791,7 +806,7 @@ void refresh_time() {
 	apply_current_palette_to_layers();
 	weather_refresh_from_storage();
 	update_status_indicators();
-	update_day_of_month_line(get_localtime(), true);
+	update_bottom_line(get_localtime(), true);
 	display_time(get_localtime(), true);
 }
 
