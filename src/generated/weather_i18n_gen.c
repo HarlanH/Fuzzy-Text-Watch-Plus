@@ -386,61 +386,6 @@ static const WeatherLocale WL_7 = {
   .d_nineties = "Neunziger",
 };
 
-static const WeatherLocale WL_8 = {
-  .sky_unknown = "-",
-  .sky_0 = "klar",
-  .sky_1 = "t. bewölkt",
-  .sky_2 = "t. bewölkt",
-  .sky_3 = "t. bewölkt",
-  .sky_45 = "Nebel",
-  .sky_48 = "Nebel",
-  .sky_51 = "Niesel",
-  .sky_53 = "Niesel",
-  .sky_55 = "Niesel",
-  .sky_56 = "Niesel",
-  .sky_57 = "Niesel",
-  .sky_61 = "Regen",
-  .sky_63 = "Regen",
-  .sky_65 = "Regen",
-  .sky_66 = "Regen",
-  .sky_67 = "Regen",
-  .sky_71 = "Schnee",
-  .sky_73 = "Schnee",
-  .sky_75 = "Schnee",
-  .sky_77 = "Schnee",
-  .sky_80 = "Regen",
-  .sky_81 = "Regen",
-  .sky_82 = "Regen",
-  .sky_85 = "Schnee",
-  .sky_86 = "Schnee",
-  .sky_95 = "Gewitter",
-  .sky_96 = "Gewitter",
-  .sky_99 = "Gewitter",
-  .f_danger_cold = "extreme Kälte",
-  .f_below_zero = "unter Null",
-  .f_single_digits = "einstellig",
-  .f_steamy = "schwül heiß",
-  .c_danger_cold = "extreme Kälte",
-  .c_frigid = "eiskalt",
-  .c_below_freezing = "unter Gefrierpunkt",
-  .c_around_freezing = "um den Gefrierpunkt",
-  .c_cold = "kalt",
-  .c_cool = "kühl",
-  .c_very_hot = "sehr heiß",
-  .q_low = "niedrig",
-  .q_mid = "mittig",
-  .q_high = "hoch",
-  .d_teens = "Zehner",
-  .d_twenties = "Zwanziger",
-  .d_thirties = "Dreißiger",
-  .d_forties = "Vierziger",
-  .d_fifties = "Fünfziger",
-  .d_sixties = "Sechziger",
-  .d_seventies = "Siebziger",
-  .d_eighties = "Achtziger",
-  .d_nineties = "Neunziger",
-};
-
 static const WeatherLocale WL_9 = {
   .sky_unknown = "-",
   .sky_0 = "clair",
@@ -551,61 +496,6 @@ static const WeatherLocale WL_10 = {
   .d_nineties = "kyūjūdai",
 };
 
-static const WeatherLocale WL_11 = {
-  .sky_unknown = "-",
-  .sky_0 = "clear",
-  .sky_1 = "p. cloudy",
-  .sky_2 = "p. cloudy",
-  .sky_3 = "p. cloudy",
-  .sky_45 = "fog",
-  .sky_48 = "fog",
-  .sky_51 = "drizzle",
-  .sky_53 = "drizzle",
-  .sky_55 = "drizzle",
-  .sky_56 = "drizzle",
-  .sky_57 = "drizzle",
-  .sky_61 = "rain",
-  .sky_63 = "rain",
-  .sky_65 = "rain",
-  .sky_66 = "rain",
-  .sky_67 = "rain",
-  .sky_71 = "snow",
-  .sky_73 = "snow",
-  .sky_75 = "snow",
-  .sky_77 = "snow",
-  .sky_80 = "rain",
-  .sky_81 = "rain",
-  .sky_82 = "rain",
-  .sky_85 = "snow",
-  .sky_86 = "snow",
-  .sky_95 = "storms",
-  .sky_96 = "storms",
-  .sky_99 = "storms",
-  .f_danger_cold = "danger cold",
-  .f_below_zero = "below zero",
-  .f_single_digits = "single digits",
-  .f_steamy = "steamy",
-  .c_danger_cold = "danger cold",
-  .c_frigid = "frigid",
-  .c_below_freezing = "below freezing",
-  .c_around_freezing = "around freezing",
-  .c_cold = "cold",
-  .c_cool = "cool",
-  .c_very_hot = "very hot",
-  .q_low = "low",
-  .q_mid = "mid",
-  .q_high = "high",
-  .d_teens = "teens",
-  .d_twenties = "twenties",
-  .d_thirties = "thirties",
-  .d_forties = "forties",
-  .d_fifties = "fifties",
-  .d_sixties = "sixties",
-  .d_seventies = "seventies",
-  .d_eighties = "eighties",
-  .d_nineties = "nineties",
-};
-
 const WeatherLocale *weather_locale_for_lang(uint8_t lang) {
   switch (lang) {
     case 1: return &WL_1;
@@ -615,10 +505,10 @@ const WeatherLocale *weather_locale_for_lang(uint8_t lang) {
     case 5: return &WL_5;
     case 6: return &WL_6;
     case 7: return &WL_7;
-    case 8: return &WL_8;
+    case 8: return &WL_7;
     case 9: return &WL_9;
     case 10: return &WL_10;
-    case 11: return &WL_11;
+    case 11: return &WL_2;
     default:
       return &WL_2;
   }

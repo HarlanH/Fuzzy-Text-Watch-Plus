@@ -16,7 +16,6 @@ const Language LANG_JAPANESE = {
     "juuni"
   },
 
-#ifdef SCREEN_WIDE
   .phrases = {
     "*$1 ji ",
     "*$1 ji gofun ",
@@ -31,22 +30,6 @@ const Language LANG_JAPANESE = {
     "*$2 ji juppun mae ",
     "*$2 ji gofun mae "
   },
-#else
-  .phrases = {
-    "*$1 ji ",
-    "*$1 ji gofun ",
-    "*$1 ji juppun ",
-    "*$1 ji juugofun ",
-    "*$1 ji nijuppun ",
-    "*$1 ji nijuugofun ",
-    "*$1 ji han ",
-    "*$2 ji nijuugofun mae ",
-    "*$2 ji nijuppun mae ",
-    "*$2 ji juugofun mae ",
-    "*$2 ji juppun mae ",
-    "*$2 ji gofun mae "
-  },
-#endif
 
   .greetings = {
     "Ohayo ",

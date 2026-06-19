@@ -25,7 +25,6 @@ AppTimer *backlightTimer = NULL;
 bool btConnected = true;
 int batteryPercent = 100;
 bool topRowShowWeather = false;
-int lastTopRowRotationMinute = -1;
 bool bottomLineShowDow = false;
 bool lastBottomLineShowDow = false;
 
@@ -50,13 +49,9 @@ static bool strictHourPhrases = true;
 // Used to optimise so we only need to run time logic once per minute.
 int lastMinute = -1;
 
-// Time in seconds since epoch when a displayed message should be removed.
-// Only set to non zero when a message is displaying.
-time_t resetMessageTime = 0;
-
-// Time in seconds since epoch when connection lost message will be displayed,
-// if connection is still lost... (attempt to reduce false notifications)
-time_t connectionLostTime = 0;
+static bool messageShowing = false;
+static AppTimer *messageTimer = NULL;
+static AppTimer *connectionLostTimer = NULL;
 
 // Which gesture to activate date screen
 // 0 = off
@@ -100,6 +95,23 @@ void backlight_off_handler(void *context)
 	(void)context;
 	light_enable(false);
 	backlightTimer = NULL;
+}
+
+static void message_expired_handler(void *context)
+{
+	(void)context;
+	messageTimer = NULL;
+	messageShowing = false;
+	display_time(get_localtime(), true);
+}
+
+static void connection_lost_check_handler(void *context)
+{
+	(void)context;
+	connectionLostTimer = NULL;
+	if (!connection_service_peek_pebble_app_connection()) {
+		notify_bt_lost();
+	}
 }
 
 static bool top_row_has_meeting_phrase(void)
@@ -608,9 +620,8 @@ void string_to_lines(char *str, char lines[NUM_LINES][BUFFER_SIZE], char format[
 void time_to_lines(int hours, int minutes, struct tm *raw_local,
                    char lines[NUM_LINES][BUFFER_SIZE], char format[])
 {
-	int length = NUM_LINES * BUFFER_SIZE + 1;
-	char timeStr[length];
-	time_to_words(hours, minutes, timeStr, length, strictHourPhrases, raw_local);
+	char timeStr[NUM_LINES * BUFFER_SIZE + 1];
+	time_to_words(hours, minutes, timeStr, sizeof(timeStr), strictHourPhrases, raw_local);
 
 	string_to_lines(timeStr, lines, format);
 }
@@ -643,8 +654,7 @@ void update_bottom_line(struct tm *t, bool force)
 // Update screen based on new time
 void display_message(char *message, int displayTime)
 {
-	if (displayTime > 0 && resetMessageTime == 0) {
-		// The current time text will be stored in the following strings
+	if (displayTime > 0 && !messageShowing) {
 		char textLine[NUM_LINES][BUFFER_SIZE];
 		char format[NUM_LINES];
 
@@ -659,16 +669,15 @@ void display_message(char *message, int displayTime)
 		}
 		
 		currentNLines = nextNLines;
-
-		time(&resetMessageTime);
-		resetMessageTime += displayTime;
+		messageShowing = true;
+		messageTimer = app_timer_register(displayTime * 1000, message_expired_handler, NULL);
 	}
 }
 
 // Update screen based on new time
 void display_time(struct tm *t, bool force)
 {
-	if (resetMessageTime != 0) { // Don't update time if a message is showing
+	if (messageShowing) {
 		return;
 	}
 
@@ -737,42 +746,13 @@ static void accel_tap_handler(AccelAxisType axis, int32_t direction) {
   backlightTimer = app_timer_register(BACKLIGHT_TIMEOUT_MS, backlight_off_handler, NULL);
 }
 
-void check_connection(time_t *now) {
-	if (connectionLostTime > 0 && connectionLostTime <= *now) {
-		if (!connection_service_peek_pebble_app_connection()) {
-			notify_bt_lost();
-		}
-		connectionLostTime = 0;
-	}
-}
-
-// Time handler called every second by the system
 void handle_tick(struct tm *tick_time, TimeUnits units_changed) {
-  // If resetMessageTime != 0, then display_time() will not update screen
-  bool force = false;
-  time_t now;
-  time(&now);
-  if (resetMessageTime != 0) {
-  	if (now >= resetMessageTime) {
-  		resetMessageTime = 0;
-  		force = true;
-  	}
-  }
+  update_top_row_phrase_rotation();
+  bottomLineShowDow = !bottomLineShowDow;
 
-  check_connection(&now);
-
-  if (lastTopRowRotationMinute == -1) {
-   	lastTopRowRotationMinute = tick_time->tm_min;
-   } else if (lastTopRowRotationMinute != tick_time->tm_min) {
-   	lastTopRowRotationMinute = tick_time->tm_min;
-   	update_top_row_phrase_rotation();
-   	bottomLineShowDow = !bottomLineShowDow;
-   }
-
-   update_status_indicators();
-
-   update_bottom_line(tick_time, false);
-  display_time(tick_time, force);
+  update_status_indicators();
+  update_bottom_line(tick_time, false);
+  display_time(tick_time, false);
 }
 
 void init_line(Line* line) {
@@ -870,11 +850,16 @@ void bt_handler(bool connected) {
 	update_status_indicators();
 
 	if (connected) {
-		connectionLostTime = 0;
+		if (connectionLostTimer != NULL) {
+			app_timer_cancel(connectionLostTimer);
+			connectionLostTimer = NULL;
+		}
 	} else {
-		time_t now;
-		time(&now);
-		connectionLostTime = now + CONNECTION_LOST_MARGIN;
+		if (connectionLostTimer != NULL) {
+			app_timer_cancel(connectionLostTimer);
+		}
+		connectionLostTimer = app_timer_register(CONNECTION_LOST_MARGIN * 1000,
+						       connection_lost_check_handler, NULL);
 	}
 }
 
@@ -961,7 +946,7 @@ void handle_init() {
 
 	refresh_time();
 	// Subscribe to ticks
-	tick_timer_service_subscribe(SECOND_UNIT, handle_tick);
+	tick_timer_service_subscribe(MINUTE_UNIT, handle_tick);
 
 	// Subscribe to bluetooth events
 	connection_service_subscribe((ConnectionHandlers) {

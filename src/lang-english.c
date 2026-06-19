@@ -18,7 +18,6 @@ const Language LANG_ENGLISH = {
     "twelve"
   },
 
-#ifdef SCREEN_WIDE
   .phrases = {
     "*$1 o'clock ",
     "*$1 o'five ",
@@ -34,6 +33,7 @@ const Language LANG_ENGLISH = {
     "almost *$2 "
   },
 
+#ifdef SCREEN_WIDE
   .greetings = {
     "Good morning ",
     "Good afternoon ",
@@ -41,21 +41,6 @@ const Language LANG_ENGLISH = {
     "Good night "
   },
 #else
-.phrases = {
-  "*$1 o'clock ",
-    "*$1 o'five ",
-    "*$1 ten ",
-    "*$1 fifteen ",
-    "*$1 twenty ",
-    "*$1 twenty five ",
-    "*$1 thirty ",
-    "*$1 thirty five ",
-    "twenty til *$2 ",
-    "quarter til *$2 ",
-    "ten til *$2 ",
-    "almost *$2 "
-},
-
   .greetings = {
     "Good  mor-  ning ",
     "Good after- noon ",

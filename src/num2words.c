@@ -123,7 +123,7 @@ static void time_to_words_impl(int hours, int minutes, char* words, size_t lengt
   check_exceptions(hours, fiveMinutePeriod, words, length);
 
   if (*words == '\0') {
-    char phrase[length];
+    char phrase[48];
     strcpy(phrase, getFiveMinutePhrase(fiveMinutePeriod));
 
     char *variable = NULL;
