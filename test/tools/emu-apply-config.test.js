@@ -23,7 +23,7 @@ test('toAppMessageDict maps yaml values to message keys', () => {
   const dict = toAppMessageDict({
     language: 11,
     offset: 150,
-    gesture: 2,
+    gesture: 4,
     bt_notification: 1,
     strict_hour_phrases: false,
     weather_code: 0,
@@ -33,7 +33,7 @@ test('toAppMessageDict maps yaml values to message keys', () => {
   assert.deepEqual(dict, {
     KEY_LANGUAGE: 11,
     KEY_OFFSET: 150,
-    KEY_GESTURE: 2,
+    KEY_GESTURE: 4,
     KEY_BT_NOTIFICATION: 1,
     KEY_STRICT_HOUR_PHRASES: 0,
     KEY_WEATHER_CODE: 0,

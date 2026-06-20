@@ -19,7 +19,6 @@ static void handle_shared_settings(DictionaryIterator *iter, const ConfigMessage
   Tuple *gesture_t = dict_find(iter, KEY_GESTURE);
   if (gesture_t) {
     ctx->set_gesture(gesture_t->value->uint8);
-    persist_write_int(KEY_GESTURE, gesture_t->value->uint8);
     APP_LOG(APP_LOG_LEVEL_DEBUG, "Gesture is %d", gesture_t->value->uint8);
   }
 

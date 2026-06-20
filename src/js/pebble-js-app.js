@@ -41,7 +41,7 @@ function buildConfigUrl(hasColorScreen, initialSettings) {
     "<option value='0'>0:00</option><option value='60'>1:00</option><option value='120'>2:00</option><option value='150'>2:30</option>" +
     "<option value='180'>3:00</option><option value='240'>4:00</option><option value='300'>5:00</option></select></div>" +
     "<div class='row'><label>Enable backlight on gesture</label><select id='gesture'>" +
-    "<option value='0'>Off</option><option value='2'>Flick wrist</option><option value='3'>Shake up/down</option><option value='1'>Boxing move</option><option value='4'>Any shake</option></select></div>" +
+    "<option value='0'>Off</option><option value='4'>On</option></select></div>" +
     "<div class='row'><label>Connection lost</label><select id='bt'>" +
     "<option value='0'>Off</option><option value='1'>Message only</option><option value='2'>Buzz and message</option></select></div>" +
     "<div class='row'><label><input id='strict_hour' type='checkbox' checked> Wait for real :00 and :30</label></div>" +
@@ -56,7 +56,7 @@ function buildConfigUrl(hasColorScreen, initialSettings) {
     "var initialSettings=" + initialSettingsJson + ";" +
     "var defaults={inverse_colors:false,background_color:'0x000000',regular_color:'0xFFFFFF',bold_color:'0xFFFFFF',language:'2',offset:'180',gesture:'4',bt_notification:'2',strict_hour_phrases:true,calendar_ics_1:'',calendar_ics_2:'',calendar_ics_3:''};" +
     "function normUrl(url){var trimmed=String(url||'').trim();if(trimmed.indexOf('webcal://')===0){return 'https://'+trimmed.substring('webcal://'.length);}return trimmed;}" +
-    "function load(){try{var raw=localStorage.getItem('" + SETTINGS_STORAGE_KEY + "');if(raw){return Object.assign({},defaults,initialSettings,JSON.parse(raw));}}catch(e){}return Object.assign({},defaults,initialSettings);}" +
+    "function load(){try{var raw=localStorage.getItem('" + SETTINGS_STORAGE_KEY + "');if(raw){var s=Object.assign({},defaults,initialSettings,JSON.parse(raw));if(s.gesture&&s.gesture!=='0'&&s.gesture!=='4'){s.gesture='4';}return s;}}catch(e){}return Object.assign({},defaults,initialSettings);}" +
     "function save(v){try{localStorage.setItem('" + SETTINGS_STORAGE_KEY + "',JSON.stringify(v));}catch(e){}}" +
     "var state=load();" +
     "if(hasColor){document.getElementById('colorRows').classList.remove('hidden');}else{document.getElementById('bwRow').classList.remove('hidden');}" +

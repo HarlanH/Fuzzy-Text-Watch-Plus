@@ -53,9 +53,6 @@
 
 // Gestures
 #define GESTURE_OFF  0
-#define GESTURE_X    1
-#define GESTURE_Y    2
-#define GESTURE_Z    3
 #define GESTURE_ANY  4
 
 #define BT_NOTIFY_OFF      0

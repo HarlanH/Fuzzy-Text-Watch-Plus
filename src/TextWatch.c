@@ -22,6 +22,8 @@ char weatherPhraseText[32];
 char topRowPhraseText[32];
 int lastDisplayedDay = -1;
 AppTimer *backlightTimer = NULL;
+static bool gestureCooldown = false;
+static AppTimer *gestureCooldownTimer = NULL;
 bool btConnected = true;
 int batteryPercent = 100;
 bool topRowShowWeather = false;
@@ -53,12 +55,7 @@ static bool messageShowing = false;
 static AppTimer *messageTimer = NULL;
 static AppTimer *connectionLostTimer = NULL;
 
-// Which gesture to activate date screen
-// 0 = off
-// 1 = Boxing move (X-axis)
-// 2 = flick wrist (Y-axis)
-// 3 = Shake up/down (Z-axis)
-// 4 = Any shake
+// Whether gestures activate the date screen (0 = off, 4 = on)
 int dateGesture = GESTURE_ANY;
 
 // Notify when BT connection is lost?
@@ -81,6 +78,7 @@ static ConfigMessageContext config_message_context;
 #define STATUS_BAR_LABEL_PAD 6
 #define STATUS_BAR_CENTER_MIN_W 40
 #define BACKLIGHT_TIMEOUT_MS 3000
+#define GESTURE_COOLDOWN_MS 1000
 // Date row position (original placement — do not change for time-block spacing).
 #define DAY_LINE_ORIGIN_Y_OFFSET 30
 #define DAY_LINE_LAYER_HEIGHT 28
@@ -95,6 +93,13 @@ void backlight_off_handler(void *context)
 	(void)context;
 	light_enable(false);
 	backlightTimer = NULL;
+}
+
+static void gesture_cooldown_expired(void *context)
+{
+	(void)context;
+	gestureCooldown = false;
+	gestureCooldownTimer = NULL;
 }
 
 static void message_expired_handler(void *context)
@@ -720,30 +725,31 @@ void display_time(struct tm *t, bool force)
 }
 
 static void accel_tap_handler(AccelAxisType axis, int32_t direction) {
+	(void)axis;
+	(void)direction;
 
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "Tap event: %d  conf: %d", axis, dateGesture);
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "Tap event: conf: %d", dateGesture);
 
-  if (dateGesture != GESTURE_ANY) {
-  	if (axis == ACCEL_AXIS_X && dateGesture != GESTURE_X) {
-	  return;
+	if (dateGesture == GESTURE_OFF) {
+		return;
 	}
-  	if (axis == ACCEL_AXIS_Y && dateGesture != GESTURE_Y) {
-	  return;
-	}
-  	if (axis == ACCEL_AXIS_Z && dateGesture != GESTURE_Z) {
-	  return;
-	}
-  }
 
-  if (backlightTimer != NULL) {
-   	cycle_top_row_phrase();
-   	bottomLineShowDow = !bottomLineShowDow;
-   	update_bottom_line(get_localtime(), true);
-   	app_timer_cancel(backlightTimer);
-   }
+	if (gestureCooldown) {
+		APP_LOG(APP_LOG_LEVEL_DEBUG, "Tap rejected (cooldown)");
+		return;
+	}
+	gestureCooldown = true;
+	gestureCooldownTimer = app_timer_register(GESTURE_COOLDOWN_MS, gesture_cooldown_expired, NULL);
 
-  light_enable(true);
-  backlightTimer = app_timer_register(BACKLIGHT_TIMEOUT_MS, backlight_off_handler, NULL);
+	cycle_top_row_phrase();
+	bottomLineShowDow = !bottomLineShowDow;
+	update_bottom_line(get_localtime(), true);
+
+	if (backlightTimer != NULL) {
+		app_timer_cancel(backlightTimer);
+	}
+	light_enable(true);
+	backlightTimer = app_timer_register(BACKLIGHT_TIMEOUT_MS, backlight_off_handler, NULL);
 }
 
 void handle_tick(struct tm *tick_time, TimeUnits units_changed) {
@@ -795,8 +801,19 @@ void set_offset(int offset) {
 }
 
 void set_gesture(int gesture) {
+	if (gesture > GESTURE_OFF && gesture != GESTURE_ANY) {
+		gesture = GESTURE_ANY;
+		persist_write_int(KEY_GESTURE, gesture);
+	}
 	dateGesture = gesture;
 	accel_tap_service_unsubscribe();
+
+	if (gestureCooldownTimer != NULL) {
+		app_timer_cancel(gestureCooldownTimer);
+		gestureCooldownTimer = NULL;
+		gestureCooldown = false;
+	}
+
 	if (gesture != GESTURE_OFF) {
 		accel_tap_service_subscribe(accel_tap_handler);
 	}
