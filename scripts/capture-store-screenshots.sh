@@ -115,23 +115,19 @@ run_one() {
     # which produces bogus tiny PNGs. Wait for the app and JS to come up instead.
     sleep 28
 
-    if [[ "$emu" == aplite ]]; then
-      aplite_return_to_watchface
-      sleep 3
-    fi
-
-    pebble emu-set-time "$time" --emulator "$emu"
-    pebble emu-battery --percent "$bat" --emulator "$emu"
-    pebble emu-bt-connection --connected "$bt" --emulator "$emu"
-    sleep 4
 
     # One repl session only — repeated pebble repl often wedges QEMU so the *next* install fails.
-    if ! apply_config_once "$emu" "$cfg"; then
-      echo "Warning: emu:apply-config failed (weather/language may be default). Continuing to screenshot." >&2
-      sleep 6
-    else
-      sleep 6
-    fi
+    #if ! apply_config_once "$emu" "$cfg"; then
+      #echo "Warning: emu:apply-config failed (weather/language may be default). Continuing to screenshot." >&2
+      #sleep 6
+    #else
+      #sleep 6
+    #fi
+
+    pebble emu-battery --percent "$bat" --emulator "$emu"
+    pebble emu-bt-connection --connected "$bt" --emulator "$emu"
+    pebble emu-set-time "$time" --emulator "$emu"
+    sleep 4
 
     if capture_shot "$emu" "$outfile"; then
       shot_ok=1
@@ -154,10 +150,11 @@ run_one() {
 mkdir -p screenshots
 
 fail=0
-run_one basalt 09:05:00 screenshots/basalt-en-905.png screenshots/capture-config-en.yml 100 yes || fail=1
-run_one basalt 09:40:00 screenshots/diorite-en-940-nobt.png screenshots/capture-config-en.yml 100 no || fail=1
-run_one flint 10:05:00 screenshots/flint-jp-1005.png screenshots/capture-config-ja.yml 100 yes || fail=1
-run_one aplite 08:58:00 screenshots/aplite-en-almost9-bat.png screenshots/capture-config-en.yml 35 yes || fail=1
+#run_one basalt 09:05:00 screenshots/basalt-en-905.png screenshots/capture-config-en.yml 100 yes || fail=1
+#run_one basalt 09:40:00 screenshots/diorite-en-940-nobt.png screenshots/capture-config-en.yml 100 no || fail=1
+#run_one flint 10:05:00 screenshots/flint-jp-1005.png screenshots/capture-config-ja.yml 100 yes || fail=1
+#run_one aplite 08:58:00 screenshots/aplite-en-almost9-bat.png screenshots/capture-config-en.yml 35 yes || fail=1
+run_one diorite 04:58:00 screenshots/diorite-en-almost5.png screenshots/capture-config-en.yml 100 yes || fail=1
 
 if [[ "$fail" -ne 0 ]]; then
   echo "One or more screenshots failed. Fix emulator/SDK state or capture manually; see README." >&2

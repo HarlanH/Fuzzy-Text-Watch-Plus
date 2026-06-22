@@ -1,6 +1,7 @@
 .*
 !.gitignore
 !.kilo/
+.kilo/plans/
 /sim
 *~
 

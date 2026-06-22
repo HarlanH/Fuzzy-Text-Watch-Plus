@@ -1,5 +1,20 @@
 # Almost Five release notes
 
+## 1.3.0
+
+### Appstore text (short)
+
+- Day-of-week on bottom line alternates with day-of-month.
+- Gestures more reliable, enabling backlight and swapping bottom line content.
+- Reduced CPU, RAM, and flash usage for better battery life and performance.
+
+### Detailed
+
+- **Day-of-week toggle:** When gesture backlight is on, tapping the watch now toggles the day name (e.g. "Monday") on the bottom line alongside the spelled day-of-month.
+- **Gesture config simplified:** The backlight-on-gesture setting is now a simple on/off toggle (previously had multiple options). On enables both the backlight pulse and the day-of-week tap toggle.
+- **Gesture debounce:** Added debounce to prevent rapid repeated tap events from toggling the display multiple times.
+- **Performance:** Reduced tick frequency and added deduplication to lower CPU, RAM, and flash usage.
+
 ## 1.2.0
 
 ### Appstore text (short)

@@ -7,11 +7,12 @@ This is a watch face for the [Pebble smartwatch](http://www.getpebble.com).
 It is based on the [PebbleTextWatch](https://github.com/wearewip/PebbleTextWatch) by waerewip,
 and [Fuzzy-Text-Watch-Plus](https://github.com/Sarastro72/Fuzzy-Text-Watch-Plus) by Sarastro72.
 
-Compared to Fuzzy-Text-Watch-Plus, this fork adds day-of-month display, upcoming-meeting flags
+Compared to Fuzzy-Text-Watch-Plus, this fork adds day-of-month 
+and day-of-week display, upcoming-meeting flags
 and Bluetooth and battery indicators, additional languages, fixed backlight on gestures,
 on-watch weather phrasing (Open-Meteo), and other small changes.
 
-**Current app version:** 1.2.0 (see `package.json` and `RELEASE_NOTES.md`).
+**Current app version:** 1.3.0 (see `package.json` and `RELEASE_NOTES.md`).
 
 
 ## For users
@@ -28,8 +29,9 @@ on-watch weather phrasing (Open-Meteo), and other small changes.
 - Configurable colors
 - Supports all pebble models up to and including Pebble Time Round
 - Configurable time offset for when each fuzzy phrase changes
-- Gesture-triggered backlight pulse
+- Gesture-triggered backlight pulse (on/off; when on, tap also toggles day-of-week display)
 - Bottom **spelled** day-of-month text (per language, from `strings/ui.yaml` on the watch)
+- **Day-of-week toggle:** tap (gesture) to show the day name on the bottom line; gesture backlight setting simplified to on/off
 - Nice staggered animation
 - Between one and four lines of text, depending on need.
 - The text rows are always centered vertically
@@ -46,9 +48,11 @@ Filenames describe the scenario (platform, language, time of day, flags). Regene
 
 | Platform | Preview |
 |---|---|
-| Aplite (English, ~08:58 “almost nine”, low battery) | ![Aplite screenshot](screenshots/aplite-en-almost9-bat.png) |
+| Aplite (English, ~08:58 "almost nine", low battery) | ![Aplite screenshot](screenshots/aplite-en-almost9-bat.png) |
 | Basalt (English, 09:05) | ![Basalt screenshot](screenshots/basalt-en-905.png) |
 | Diorite (English, 09:40, Bluetooth disconnected) | ![Diorite screenshot](screenshots/diorite-en-940-nobt.png) |
+| Diorite (English, ~04:58 "almost five") | ![Diorite screenshot](screenshots/diorite-en-almost5.png) |
+| Diorite (English, ~04:58 "almost five", low battery) | ![Diorite screenshot](screenshots/diorite-en-almost5-bat.png) |
 | Flint (Japanese, 10:05) | ![Flint screenshot](screenshots/flint-jp-1005.png) |
 
 The **`diorite-en-940-nobt`** frame is recorded on the **basalt** emulator: both Pebble Time and Time Steel use the same 144×168 color layout, and some SDK installs cannot complete `pebble screenshot` against the diorite QEMU target even though the PNG is labeled for the Steel listing.
